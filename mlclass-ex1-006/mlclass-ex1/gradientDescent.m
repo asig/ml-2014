@@ -20,12 +20,12 @@ for iter = 1:num_iters
     %
 
     theta_new = zeros(n,1);    
-    for i = 1:n
+    for j = 1:n
         costs = zeros(m,1);
-        for j=1:m
-            costs(j) = (theta'*X(j,:)' - y(j)) - X(j, i);
+        for i=1:m
+            costs(i) = (theta'*X(i,:)' - y(i)) * X(i, j);
         end
-        theta_new(i) = theta(i) - (alpha/m * sum(costs));
+        theta_new(j) = theta(j) - (alpha/m * sum(costs));
     end
     theta = theta_new;
 
