@@ -15,7 +15,14 @@ p = zeros(m, 1);
 %               You should set p to a vector of 0's and 1's
 %
 
-
+for i = 1:m	
+	h = theta' * X(i,:)' ;
+	if h<0
+		p(i,1) = 0;
+	else
+		p(i,1) = 1;
+	end
+end
 
 
 
