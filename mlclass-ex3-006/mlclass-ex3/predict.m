@@ -21,12 +21,15 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+# Add a column of ones to X
+X_padded = [ones(m,1), X];
 
-
-
-
-
-
+for i = 1:m
+	a2 = sigmoid(X_padded(i,:)*Theta1');
+    a2_padded = [1, a2];
+	a3 = sigmoid(a2_padded * Theta2');
+	[dummy, p(i)] = max( a3, [], 2);
+end
 
 
 % =========================================================================
