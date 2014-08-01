@@ -114,11 +114,25 @@ end
 J += lambda/(2*m) * reg;
 
 
-#
-# FOWARD PROPAGATION and COST COMPUTATION
-#
+# Regularize Theta gradients
+Reg1 = Theta1;
+Reg1(:,1) = zeros(size(Theta1,1),1);
+Theta1_grad += (Reg1 .* lambda/m);
 
+Reg2 = Theta2;
+Reg2(:,1) = zeros(size(Theta2,1),1)	;
+Theta2_grad += (Reg2 .* lambda/m);
 
+for j = 1:hidden_layer_size
+	for k = 1:input_layer_size
+		reg += Theta1(j, k + 1)^2; # Skip bias
+	end
+end
+for j = 1:num_labels
+	for k = 1:hidden_layer_size
+		reg += Theta2(j, k + 1)^2; # Skip bias
+	end
+end
 
 
 % -------------------------------------------------------------
