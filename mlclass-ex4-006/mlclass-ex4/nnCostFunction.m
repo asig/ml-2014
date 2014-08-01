@@ -63,22 +63,40 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
+
 # Add a column of ones to X
 X_padded = [ones(m,1), X];
 
+Delta2 = zeros(num_labels, hidden_layer_size + 1);
+Delta1 = zeros(hidden_layer_size, input_layer_size + 1);
 J = 0;
 for i = 1:m
-	a2 = sigmoid(X_padded(i,:)*Theta1');
+	#
+	# FORWARD PROPAGATION
+	#
+	a1 = X(i,:);
+    a1_padded = [1, a1];
+	z2 = a1_padded*Theta1';
+	a2 = sigmoid(z2);
     a2_padded = [1, a2];
-	a3 = sigmoid(a2_padded * Theta2');
+    z3 = a2_padded * Theta2';
+	a3 = sigmoid(z3);
 
 	# transform y into a vector
 	y_vec = zeros(num_labels,1);
 	y_vec(y(i)) = 1;
 	
 	J += sum( -y_vec .* log(a3') - (1 - y_vec) .* log( 1 - a3'));
+
+	delta3 = a3' - y_vec;
+	delta2 = (Theta2' * delta3) .* (a2_padded' .* (1 - a2_padded')); # sigmoidGradient(z2'); ??? it should be sigmoidGradtient of z2 with a bias?
+	Delta2 = Delta2 + delta3 * a2_padded;
+	Delta1 = Delta1 + delta2(2:end) * a1_padded;
+
 end
 J /= m;
+Theta1_grad = (1/m) * Delta1;
+Theta2_grad = (1/m) * Delta2;
 
 # Regularization
 reg = 0;
@@ -95,6 +113,10 @@ end
 
 J += lambda/(2*m) * reg;
 
+
+#
+# FOWARD PROPAGATION and COST COMPUTATION
+#
 
 
 
