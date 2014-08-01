@@ -80,7 +80,20 @@ for i = 1:m
 end
 J /= m;
 
+# Regularization
+reg = 0;
+for j = 1:hidden_layer_size
+	for k = 1:input_layer_size
+		reg += Theta1(j, k + 1)^2; # Skip bias
+	end
+end
+for j = 1:num_labels
+	for k = 1:hidden_layer_size
+		reg += Theta2(j, k + 1)^2; # Skip bias
+	end
+end
 
+J += lambda/(2*m) * reg;
 
 
 
