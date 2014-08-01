@@ -63,16 +63,22 @@ Theta2_grad = zeros(size(Theta2));
 %
 
 
+# Add a column of ones to X
+X_padded = [ones(m,1), X];
 
+J = 0;
+for i = 1:m
+	a2 = sigmoid(X_padded(i,:)*Theta1');
+    a2_padded = [1, a2];
+	a3 = sigmoid(a2_padded * Theta2');
 
-
-
-
-
-
-
-
-
+	# transform y into a vector
+	y_vec = zeros(num_labels,1);
+	y_vec(y(i)) = 1;
+	
+	J += sum( -y_vec .* log(a3') - (1 - y_vec) .* log( 1 - a3'));
+end
+J /= m;
 
 
 
