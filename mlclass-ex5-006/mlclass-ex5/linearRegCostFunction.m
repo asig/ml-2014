@@ -20,14 +20,26 @@ grad = zeros(size(theta));
 %
 
 
+n = length(theta);
 
+J = sum( ((theta' * X')' .- y) .^ 2 )/(2*m);
+sum = 0;
+for i = 2:n
+	sum += theta(i)*theta(i);
+end
+J = J + lambda/(2*m)*sum;
 
-
-
-
-
-
-
+for j = 1:n
+	sum = 0;
+	for i = 1:m
+		h = theta' * X(i, :)';
+		sum += (h-y(i)) * X(i, j)  ;
+	end
+	grad(j) = sum/m;
+	if (j > 1)
+		grad(j) += lambda/m*theta(j);
+	end
+end
 
 
 % =========================================================================
