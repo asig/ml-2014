@@ -24,9 +24,27 @@ sigma = 0.3;
 %
 
 
+bestError = Inf
+bestC = 0
+bestSigma = 0
+for testC = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]
+	for testSigma = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]
+		fprintf('Training with C = %f and sigma = %f\n', testC, testSigma);
+		model= svmTrain(X, y, testC, @(x1, x2) gaussianKernel(x1, x2, testSigma));
+		predictions = svmPredict(model, Xval);
+		error = mean(double(predictions ~= yval));
+		fprintf('Error for C = %f and sigma = %f: %f\n', testC, testSigma, error);
+		if (error < bestError) 
+			fprintf('new optimal C = %f and sigma = %f: %f\n', testC, testSigma);
+			bestError = error;
+			bestC = testC;
+			bestSigma = testSigma;
+		end
+	end
+end
 
-
-
+C = bestC;
+sigma = bestSigma;
 
 
 % =========================================================================
