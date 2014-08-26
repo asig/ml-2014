@@ -50,6 +50,20 @@ for j = 1:num_users
 end
 J = sum/2;
 
+% regularization for cost
+thetaReg = 0;
+for j = 1:num_users
+  thetaReg += Theta(j,:) * Theta(j,:)' ;
+end
+J += lambda/2 * thetaReg ;
+
+xReg = 0;
+for i = 1:num_movies
+  xReg += X(i,:) * X(i,:)' ;
+end
+J += lambda/2 * xReg ;
+
+
 for k = 1:num_features
 	for j = 1:num_users
 		sum = 0;
@@ -72,6 +86,12 @@ for k = 1:num_features
 		X_grad(i,k) = sum;
 	end
 end
+
+% regularization for gradient
+X_grad = X_grad .+ lambda * X;
+Theta_grad = Theta_grad .+ lambda * Theta;
+
+
 
 
 % =============================================================
